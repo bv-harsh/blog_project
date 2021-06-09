@@ -1,0 +1,24 @@
+<h2>Articles</h2>
+
+<p>
+<strong>Title:</strong>
+<%= @article.title %>
+</p>
+
+<p>
+<strong>Body:</strong>
+<%= @article.body %>
+</p>
+
+<ul>
+	<li>
+		<%= link_to "Edit", 
+									"/users/#{params[:user_id]}/articles/#{params[:id]}/edit" %>
+	</li>
+	<li>
+		<%= link_to "Destroy", 
+								"/users/#{params[:user_id]}/articles/#{params[:id]}",
+								method: :delete,
+								data: { confirm: "Are you sure?" } %>
+	</li>
+</ul>
