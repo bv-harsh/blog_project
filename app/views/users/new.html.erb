@@ -1,0 +1,21 @@
+<br><br>
+<%= link_to "Home", :action=> 'index' %>
+
+<h1>New User</h1>
+
+<%= form_with model: @user do |form| %>
+	<div>
+		<%= form.label :username %><br>
+		<%= form.text_field :username %>
+	</div>
+
+	<div>
+		<%= form.label :password %><br>
+		<%= form.password_field :password %>
+	</div>
+
+	<div>
+		<%= form.submit %>
+	</div>
+<% end %>
+
