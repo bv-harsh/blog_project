@@ -1,9 +1,14 @@
 class ApplicationController < ActionController::Base
-	before_action :set_current_user
+	helper_method :set_current_user
 
 	def set_current_user
-		if session[:user_id]
-			Current.user = User.find_by(id: session[:user_id])
+			@_current_user ||= User.where(id: session[:user_id]).first
+			@_current_user
+	end
+
+	def authorize
+		if !set_current_user
+			redirect_to sign_in_path
 		end
 	end
 end

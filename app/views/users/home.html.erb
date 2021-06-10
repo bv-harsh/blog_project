@@ -1,9 +1,9 @@
-<% if @user %> 
-	<br><%= button_to "Logout", logout_path, method: :delete %>
+<% if set_current_user %> 
+	<br><%= button_to "Logout", log_out_path, method: :delete %>
 
 	<h2>Articles</h2>
 
-	<% @user.articles.each do |article| %>
+	<% set_current_user.articles.each do |article| %>
 		<p>
 		<strong>Title:</strong>
 		<%= link_to article.title,
@@ -11,5 +11,5 @@
 		</p>
 	<% end %>
 
-	<%= link_to "Create new article",new_user_article_path(@user) %>
+	<%= link_to "Create new article",new_user_article_path(set_current_user) %>
 <% end %>

@@ -1,52 +1,46 @@
 class UsersController < ApplicationController
-  def index
-  end
+	before_action :authorize, except: [:index, :all, :sign_in, :validate, :new, :create]
+	def index
+	end
 
-	def signIn
+	def sign_in
 	end
 
 	def validate
-    @user = User.find_by(username: params[:username])
-		
+		@user = User.where(username: params[:username]).first
+
 		if @user.present? && @user.authenticate(params[:password])
 			session[:user_id] = @user.id
-			url = "/signIn/#{@user.id}"
-      redirect_to url
-    else
-      flash[:alert] = "Invalid email or password"
-			render :signIn
-    end
-	end
-	
-	def home
-		if session[:user_id]
-			@user = User.find(params[:user_id])
+			set_current_user
+			redirect_to "/sign_in/#{@user.id}"
 		else
-			render :signIn
+			flash[:alert] = "Invalid email or password"
+			render :sign_in
 		end
 	end
-	
+
+	def home
+	end
+
 	def new
 		@user = User.new
 	end
 
 	def create
-		flag = User.new_user(params)
-	
-		if flag != 0
-			redirect_to action: "index"
+		user = User.new_user(params)
+
+		if user
+			redirect_to action: "index" 
 		else
 			render :new
 		end
 	end
 
 	def show
-		@user = User.find(params[:id])
 	end
 
-	def logOut
-    session[:user_id] = nil
-    redirect_to root_path, notice: "Logged out"
-  end
-
+	def log_out
+		session[:user_id] = nil
+		redirect_to root_path, notice: "Logged out"
+	end
 end

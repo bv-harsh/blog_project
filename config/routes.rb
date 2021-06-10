@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
 	root 'users#index'
-	get 'signIn/:user_id', to: 'users#home'
-	get 'signIn', to: 'users#signIn'
+	get 'sign_in/:user_id', to: 'users#home'
+	get 'sign_in', to: 'users#sign_in'
 	get 'all', to:'articles#all'
-	post 'signIn', to: 'users#validate'
-	delete "logout", to: "users#logOut"
+	post 'sign_in', to: 'users#validate'
+	delete "log_out", to: "users#log_out"
 
 	resources :users do
 		resources :articles

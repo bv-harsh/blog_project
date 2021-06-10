@@ -1,33 +1,32 @@
 class ArticlesController < ApplicationController
+	before_action :authorize, except: [:index, :all, :sign_in, :validate]
+	
 	def new
 		@article = Article.new
 	end
 
 	def create
-		@user = User.find(params[:user_id])
-		@article = @user.articles.new(title: params[:article][:title], 
-																	body: params[:article][:body])
+		@article = Article.new(title: params[:article][:title], 
+													 body: params[:article][:body],
+													 user_id: set_current_user.id)
 
 		if @article.save
-			redirect_to "/signIn/#{params[:user_id]}"
+			redirect_to "/sign_in/#{params[:user_id]}"
 		else
 			render :new
 		end
 	end
 
 	def show
-		@article = Article.where(user_id: params[:user_id], 
-														 id: params[:id]).select(:title, :body).take
+		@article = Article.where(id: params[:id]).first
 	end
 
 	def edit
-		@user = User.find(params[:user_id])
-		@article = @user.articles.find(params[:id])
+		@article = set_current_user.articles.where(id: params[:id]).first
 	end
 
 	def update
-		@user = User.find(params[:user_id])
-		@article = @user.articles.find(params[:id])
+		@article = set_current_user.articles.where(id: params[:id]).first
 
 		if @article.update(user_id: params[:user_id],
 											 title: params[:article][:title], 
@@ -39,11 +38,10 @@ class ArticlesController < ApplicationController
 	end
 
 	def destroy
-		@user = User.find(params[:user_id])
-		@article = @user.articles.find(params[:id])
+		@article = set_current_user.articles.where(id: params[:id]).first
 		@article.destroy
 
-		redirect_to "/signIn/#{params[:user_id]}"
+		redirect_to "/sign_in/#{params[:user_id]}"
 	end
 
 	def all
